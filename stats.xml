@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+
+        
+
+
+
+        <record id="ba_stats_business_unit_report_graph" model="ir.ui.view">
+            <field name="name">ba.stats.business.unit.graph</field>
+            <field name="model">ba.stats.business.unit</field>
+            <field name="arch" type="xml">
+                <graph string="Ventas por unidad de negocio" type="line">
+                   <field name="date_due" type="row" />
+                   <field name="business_unit_id" type="col"/>
+                    <field name="updated_price" type="measure"/>
+
+
+                </graph>
+            </field>
+        </record>
+        <record id="action_ba_stats_business_unit_report" model="ir.actions.act_window">
+            <field name="name">Grafico por Unidad de negocio</field>
+            <field name="res_model">ba.stats.business.unit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="ba_stats_business_unit_report_graph"/>
+            <field name="context">{'search_default_three_year':1}</field>
+            <field name="domain"></field>
+        </record>
+        <menuitem action="action_ba_stats_business_unit_report" id="menu_action_ba_stats_business_unit_report" parent="menu_board_stats" sequence="20"/>
+
+        <record id="ba_stats_business_unit_report_pivot_graph" model="ir.ui.view">
+            <field name="name">ba.stats.business.unit.pivot.graph</field>
+            <field name="model">ba.stats.business.unit</field>
+            <field name="arch" type="xml">
+                <graph string="Ventas por unidad de negocio" type="pivot">
+                   <field name="date_due" type="row" />
+                   <field name="business_unit_id" type="col"/>
+                    <field name="updated_price" type="measure"/>
+
+
+                </graph>
+            </field>
+        </record>
+  
+
+
+        <record id="action_ba_stats_business_unit_pivot_report" model="ir.actions.act_window">
+            <field name="name">pivot Unidad de negocio</field>
+            <field name="res_model">ba.stats.business.unit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="ba_stats_business_unit_report_pivot_graph"/>
+            <field name="context">{'search_default_three_year':1}</field>
+            <field name="domain"></field>
+        </record>
+
+
+
+        
+        <menuitem action="action_ba_stats_business_unit_report" id="action_ba_stats_business_unit_pivot_report" parent="menu_board_stats" sequence="20"/>
+
+
+        <record id="ba_stats_team_pivot" model="ir.ui.view">
+            <field name="name">ba_stats_team_pivot</field>
+            <field name="model">ba.stats.business.unit</field>
+            <field name="arch" type="xml">
+                <graph string="Ventas por equipo" type="pivot">
+                   <field name="date_due" type="col" />
+                   <field name="section_id" type="row"/>
+                    <field name="updated_price" type="measure"/>
+
+
+                </graph>
+            </field>
+        </record>
+  
+
+
+        <record id="action_ba_stats_team_pivot" model="ir.actions.act_window">
+            <field name="name">Ventas por equipo</field>
+            <field name="res_model">ba.stats.business.unit</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">graph</field>
+            <field name="view_id" ref="ba_stats_team_pivot"/>
+            <field name="context">{'search_default_three_year':1}</field>
+            <field name="domain"></field>
+        </record>
+
+
+
+        
+        <menuitem action="action_ba_stats_team_pivot" id="menu_action_ba_stats_team_pivot" parent="menu_board_stats" sequence="25"/>
+
+
+
+
+
+
+        <record id="ba_stats_business_unit_report_filter" model="ir.ui.view">
+            <field name="name">ba.stats.business.unit.select</field>
+            <field name="model">ba.stats.business.unit</field>
+            <field name="arch" type="xml">
+                <search string="Seach event">
+                    <field name="user_id" string="Salesman"/>
+                    <field name="month" string="month"/>
+
+                    <field name="section_id" string="Section id"/>
+                    <field name="product_id" string="Product"/>
+                    <field name="product_id" string="Category" domain="[('product_id.categ_id','child_of',self)]"/>
+                    <field name="date_due" string="El mes" domain="['|',('date_due','&gt;=', (self.strtotime('%%m/%%Y').strftime('%%Y-%%m-01')),('date_due','&lt;=',(self.strtotime('%%m/%%Y')+relativedelta(months=1)-relativedelta(days=1)).strftime('%%Y-%%m-%%d'))]"/>
+
+                    <field name="business_unit_id" string="business unit"/>
+                    <filter string="this month" name="this_mont" domain="[('date_due','&gt;=',time.strftime('%%Y-%%m-01'))]"/>
+                    <filter string="Ultimo año" name="last_year" domain="[('date_due','&gt;=',(context_today()-relativedelta(months=12)).strftime('%%Y-%%m-01'))]"/>
+
+                    <filter string="Ultimos 3 años" name="three_year" domain="[('date_due','&gt;=',(context_today()-relativedelta(months=36)).strftime('%%Y-%%m-01'))]"/>
+
+                    <filter string="Same days" name="comparative" domain="['|','|',('date_due','&gt;=',time.strftime('%%Y-%%m-01')),'&amp;',('date_due','&gt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-01')),('date_due','&lt;=',(context_today()-relativedelta(months=1)).strftime('%%Y-%%m-%%d')),'&amp;',('date_due','&gt;=',(context_today()-relativedelta(months=12)).strftime('%%Y-%%m-01')),('date_due','&lt;=',(context_today()-relativedelta(months=12)).strftime('%%Y-%%m-%%d'))]"/>
+
+
+                    <group expand="0" string="Group By">
+                        <filter context="{'group_by':'user_id'}" domain="[]" icon="terp-stock_effects-object-colorize" string="Vendedor"/>
+                        <filter context="{'group_by':'business_unit_id'}" domain="[]" icon="terp-stock_effects-object-colorize" string="Unidad de negocio" name="group_by_business_unit_id" />
+                        <filter context="{'group_by':'section_id'}"  name="group_by_section_id" domain="[]" icon="terp-stock_effects-object-colorize" string="Equipo"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+
+<record id="view_sales_evolution_tree" model="ir.ui.view">
+            <field name="name">sales.evolution.tree</field>
+            <field name="model">sales.evolution</field>
+            <field name="arch" type="xml">
+                <tree string="Business unit">
+
+                    <field name="name"/>
+                    <field name="variacion_real"/>
+                    <field name="variacion_actualizada"/>
+                    <field name="amount"/>
+                    <field name="up"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_sales_evolution_form" model="ir.ui.view">
+            <field name="name">sales.evolution.form</field>
+            <field name="model">sales.evolution</field>
+            <field name="arch" type="xml">
+                <form string="Business unit" version="7.0">
+                    <group>
+                    <field name="name"/>
+                    <field name="variacion_real"/>
+                    <field name="variacion_actualizada"/>
+                    <field name="amount"/>
+                    <field name="up"/>
+                    </group>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_sales_evolution" model="ir.actions.act_window">
+            <field name="name">Evolucion de ventas</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">sales.evolution</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="view_sales_evolution_tree"/>
+        </record>
+
+          <menuitem action="action_sales_evolution" id="menu_sales_evolution" parent="menu_board_stats" sequence="18" />
+
+
+
+
+
+    </data>
+</openerp>

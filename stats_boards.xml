@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<openerp>
+    <data>
+        <!--My Dashboard-->
+
+        <record id="stats_board_form" model="ir.ui.view">
+            <field name="name">stats.board.form</field>
+            <field name="model">board.board</field>
+            <field name="arch" type="xml">
+                <form string="Management Systems Dashboard">
+                    <hpaned>
+                        <child1>
+                        </child1>
+                        <child2>
+                        </child2>
+                    </hpaned>
+                </form>
+            </field>
+        </record>
+
+       <record id="open_stats_board" model="ir.actions.act_window">
+            <field name="name">Estadisticas de venta</field>
+            <field name="res_model">board.board</field>
+            <field name="usage">menu</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="stats_board_form"/>
+        </record>
+
+
+    
+            <!--My Dashboard Menu-->
+        <menuitem 
+            id="menu_board_stats"
+            parent="base.menu_reporting_dashboard"
+            action="open_stats_board"
+            sequence="5"/>
+    </data>
+</openerp>

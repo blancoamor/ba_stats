@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+       
+
+        <record id="view_account_fiscalyear_form" model="ir.ui.view">
+            <field name="model">account.fiscalyear</field>
+            <field name="inherit_id" ref="account.view_account_fiscalyear_form"/>
+            <field name="arch" type="xml">
+
+                <field name="end_journal_period_id" position="after">
+                            <field name="inflation_coef" />
+                
+                </field>
+            </field>
+        </record>
+
+
+
+
+        <record id="ba_view_account_fiscalyear_tree" model="ir.ui.view">
+            <field name="name">ba.view.account.fiscalyear.tree</field>
+            <field name="model">account.fiscalyear</field>
+            <field name="arch" type="xml">
+                <tree editable="top">
+                    <field name="name" attrs="{'readonly':True}" />
+                    <field name="inflation_coef" />
+
+                </tree>
+
+            </field>
+        </record>
+
+
+
+
+        <record id="ba_action_view_account_fiscalyear" model="ir.actions.act_window">
+            <field name="name">Control de Inflacion</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.fiscalyear</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="ba_view_account_fiscalyear_tree"/>
+        </record>
+
+          <menuitem action="ba_action_view_account_fiscalyear" id="menu_view_account_fiscalyear" parent="menu_board_stats" sequence="30" />
+
+
+
+
+    </data>
+</openerp>
