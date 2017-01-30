@@ -71,14 +71,12 @@ class ba_stats_business_unit(models.Model):
                         select ail.id,ail.create_uid,ail.write_uid,ail.create_date,ail.write_date,ail.product_id ,ail.price_unit,price_subtotal * 1.21 line_with_tax,quantity,
                         concat(to_char( ai.date_due,'mm'),'/',to_char( ai.date_due,'yy')) as month , 
                         ai.partner_id,ai.user_id,ai.section_id,ai.date_due,
-                        pt.business_unit_id , si.name as supplier_id , (price_subtotal * 1.21) * ye.inflation_coef  as updated_price
+                        pt.business_unit_id , si.name as supplier_id , (list_price * 1.21) as updated_price
                         from account_invoice_line ail 
                         join account_invoice ai on (ai.id=ail.invoice_id)
                         join product_product pp on (pp.id=ail.product_id)
                         join product_template pt on (pp.product_tmpl_id = pt.id)
                         join product_supplierinfo si on (si.product_tmpl_id = pt.id and si.sequence=1)
-                        join account_period pe on (pe.id = ai.period_id)
-                        join account_fiscalyear ye on (ye.id = pe.fiscalyear_id)
                 
                  ) """)
 
